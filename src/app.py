@@ -88,6 +88,24 @@ def get_activities():
     return activities
 
 
+@app.get("/activities/{activity_name}/participants")
+def get_activity_participants(activity_name: str):
+    """Get the list of participants for an activity"""
+    # Validate activity exists
+    if activity_name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+    
+    # Get the specific activity
+    activity = activities[activity_name]
+    
+    return {
+        "activity_name": activity_name,
+        "participants": activity["participants"],
+        "participant_count": len(activity["participants"]),
+        "max_participants": activity["max_participants"]
+    }
+
+
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
